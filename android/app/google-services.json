@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "86288978720",
+    "project_id": "vacayathome-8c048",
+    "storage_bucket": "vacayathome-8c048.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:86288978720:android:8ce61d4814e0122768fd45",
+        "android_client_info": {
+          "package_name": "com.justintech.vacayathome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "86288978720-rk9lgjoljl5i8obah8gslb6ti0g46rdb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.justintech.vacayathome",
+            "certificate_hash": "013be302ac14d7861149506fda23166cba909708"
+          }
+        },
+        {
+          "client_id": "86288978720-hsv17qsmin0h9jov9e3a9c63oadln8aa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWsnJbQtgqzJnfCRJWiyKxsQbTb4VC5-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "86288978720-hsv17qsmin0h9jov9e3a9c63oadln8aa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
