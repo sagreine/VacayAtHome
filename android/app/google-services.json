@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "86288978720-dv534906vlg9pokas4m5hubohg6q4rdi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.justintech.vacayathome",
+            "certificate_hash": "d767bc94dc5c6e8557a6770b1d906690b40ca71d"
+          }
+        },
+        {
           "client_id": "86288978720-rk9lgjoljl5i8obah8gslb6ti0g46rdb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

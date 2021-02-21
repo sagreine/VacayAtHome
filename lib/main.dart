@@ -1,117 +1,265 @@
+//import 'package:firebase_auth_ui/firebase_auth_ui.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+
+//import 'package:admob_flutter/admob_flutter.dart';
+//import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vacayathome/login_view.dart';
+import 'package:vacayathome/main_view.dart';
+//import 'package:flutter_downloader/flutter_downloader.dart';
+//import 'package:home_gym/controllers/controllers.dart';
+//import 'package:home_gym/models/models.dart';
+//import 'package:flutter_bloc/flutter_bloc.dart'
+//import 'package:home_gym/blocs/blocs.dart';
+//import 'package:home_gym/blocs/timer/timer_bloc.dart';
+//import 'package:home_gym/ticker.dart';
+//import 'package:home_gym/views/views.dart';
+//import 'package:path_provider/path_provider.dart';
+//import 'package:provider/provider.dart';
+//import 'package:home_gym/simple_bloc_delegate.dart';
+//import 'package:bloc/bloc.dart';
+//import 'package:flutter_fling/flutter_fling.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart' as Foundation;
+import 'package:vacayathome/muser.dart';
+//import 'package:camera/camera.dart';
+//import 'package:adaptive_theme/adaptive_theme.dart';
+// BLoC for each page
+// complex page-children should have their own block, parent subscribes to state changes
 
-void main() {
-  runApp(MyApp());
+// what events will happen?
+// those go in event
+
+// what goes in state?
+/// the variables or data the screen/app will use in certain states
+/// initial state first, then e.g. loaded, not loaded, etc.
+
+// bloc - computation, querying.
+/// Event in, state out. deliver to UI via sending a state
+
+// UI defined elsewhere
+// default: stateless background UI, stateless action widgets
+
+//flutter pub run build_runner watch
+
+//List<CameraDescription> cameras;
+//int temp = 1;
+// this is bad practice :(
+bool firstPull;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+  // TODO if we stop using this plugin, remove this. at least
+  /*await FlutterDownloader.initialize(
+      debug: Foundation
+          .kDebugMode // optional: set false to disable printing logs to console
+      );*/
+//  final savedThemeMode = await AdaptiveTheme.getThemeMode();
+  // themedata will rebuild from just below here, which we don't want to do everything
+  // cuz some things are only on first pull, so not that we're not on the first pull anymore
+  firstPull = false;
+  //Admob.initialize();
+  //Admob.initialize(testDeviceIds: ['54ce071a-af3d-401e-8ee4-e5b7507bd021']);
+  /*if (Foundation.kDebugMode) {
+    Admob.initialize(testDeviceIds: ['C3484AC7A3D0D8EA2FB46B94EE1F98A5']);
+  } else {
+    Admob.initialize();
+  }*/
+  //Admob.initialize();
+
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => Muser(),
+        ), /*
+    ChangeNotifierProvider(create: (context) => Settings()),
+    // most of these can move down now...
+    ChangeNotifierProvider(create: (context) => LifterWeights()),
+    ChangeNotifierProvider(create: (context) => LifterMaxes()),
+    ChangeNotifierProvider(
+      create: (context) => ExerciseSet(), //context: context),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => ExerciseDay(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => Programs(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => OldVideos(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => FlingMediaModel(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => Prs(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => PickDay(),
+    ),*/
+      ],
+      child: MyApp(
+          //savedThemeMode: savedThemeMode
+          )));
+  //)
+  //)
+  //;
 }
 
+/*
+void getInitialPull(BuildContext context) async {
+  var programs = Provider.of<Programs>(context, listen: false);
+  List<QueryDocumentSnapshot> list =
+      new List.from((await getPrograms()).docs.toList());
+
+  programs.setProgram(
+      programs: list.map((QueryDocumentSnapshot docSnapshot) {
+    return docSnapshot.id.toString();
+    // this is a first step towards how to get a step further for if/when we're not (stupidly) using the ID and want e.g. a display name.
+    //return docSnapshot.data().entries.toString();
+  }).toList());
+}
+*/
+/*
+void _getInitialPull(BuildContext context) async {
+  var programs = Provider.of<Programs>(context, listen: false);
+  // don't want await here. use .then()
+  ProgramController().updateProgramList(context);
+  //programs.setProgram(programs: await getPrograms());
+  print("Initial pull of programss: ${programs.programs}");
+  FlingController flingController = FlingController();
+  flingController.getCastDevices(context);
+}
+*/
+void _getSharedPrerferences(BuildContext context) async {
+  //var settings = Provider.of<Settings>(context, listen: false);
+  final prefs = await SharedPreferences.getInstance();
+  //settings.saveLocal = prefs.getBool("saveLocal") ?? true;
+}
+
+/*
+void _serverInit(context) {
+  var serverRequest = Provider.of<FlingMediaModel>(context, listen: false);
+  // we only want to allow sharing in debug mode, simply to allow live-refreshes more easily...
+  HttpServer.bind('0.0.0.0', 4040, shared: Foundation.kDebugMode)
+      .then((serverRequests) {
+    serverRequest.httpServer = serverRequests;
+    // note: autocompress doesn't allow non-compressed videos of meaningful length to go well...
+    print(
+        "listening to ${serverRequests.address} address and port: ${serverRequests.port}");
+  });
+}
+*/
+/*
+void _clearOlddata() async {
+  var appDir = (await getTemporaryDirectory()).path;
+
+  var videosDr = (await getApplicationDocumentsDirectory()).path.toString();
+  // + "/files/video_compress";
+  new Directory(appDir).delete(recursive: true);
+  new Directory(videosDr).delete(recursive: true);
+}
+*/
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
+  // necessary to pull in the last saved theme mode at the very start
+  // technically we don't much care and could roll our own, but seems best practice
+  //final AdaptiveThemeMode savedThemeMode;
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  const MyApp({
+    Key key,
+    //this.savedThemeMode
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+    //var day = Provider.of<ExerciseDay>(context, listen: false);
+    // load all non-user-specific things async (not waiting for them) during the splash.
+    // okay to be here because this is only to be built once --- if the screen goes black during splash though?
+    // but this is running over and over again....? just on hot reload though actually.
+    if (firstPull = true) {
+      /*print("doing initial pulls and setups from Main");
+      _getInitialPull(context);
+      _serverInit(context);
+      _getSharedPrerferences(context);
+      _clearOlddata();*/
+    }
+
+    // maybe check if the user is already authorized here, and go to login if not?
+    /*return AdaptiveTheme(
+        light: ThemeData(
+          brightness: Brightness.light,
+          primarySwatch: Colors.red,
+          accentColor: //Colors.amber,
+              Color(0xff12c2e9).withOpacity(0.4),
+          hoverColor: Color(0xffc471ed).withOpacity(0.4),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        dark: ThemeData(
+          brightness: Brightness.dark,
+          primaryColor: Color(0xFF282828),
+          accentColor: Color(0xff2c274c), //Color.fromRGBO(72, 74, 126, 1),
+          hoverColor: Color(0xff46426c),
+          //Color(0xff46426c),
+
+          //primarySwatch: Colors.red,
+          //accentColor: Colors.amber,
+        ),
+        initial: savedThemeMode ?? AdaptiveThemeMode.dark,
+        builder: (theme, darkTheme) {*/
+    /*theme: theme,
+        darkTheme: darkTheme,
+        home: MyHomePage(),*/
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      //theme: theme,
+      //darkTheme: darkTheme,
+
+      /*ThemeData(
+        //primaryColor: Color(0xFF282828), //Color.fromRGBO(109, 234, 255, 1),
+        //accentColor: Color.fromRGBO(72, 74, 126, 1),
+        //brightness: Brightness.dark,
+      ),*/
+      title: 'Home Gym',
+      initialRoute: '/',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': //(context) =>
+            //SplashScreen.navigate(
+            //backgroundColor: Colors.grey[850],
+            //name: 'assets/flares/logo1.flr',
+            //next:
+            (context) => LoginView(),
+        //until: () => Future.delayed(Duration(seconds: 2)),
+        //startAnimation: 'Untitled',
+        //),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        '/login': (context) => LoginView(),
+        '/main': (context) => LoginView(),
+        /*'/do_lift': (context) => DoLiftView(),
+              '/help': (context) => HelpView(),
+              '/lifter_maxes': (context) => LifterMaxesView(),
+              '/lifter_weights': (context) => LifterWeightsView(),
+              '/pick_day': (context) => PickDayView(),
+              '/profile': (context) => ProfileView(),
+              '/programs': (context) => ProgramsView(),
+              '/settings': (context) => SettingsView(
+                  savedThemeMode: savedThemeMode ?? AdaptiveThemeMode.dark),
+              '/intro_screen': (context) => IntroScreenView(),
+              '/excerciseday': (context) => ExcerciseDayView(),
+              "/lifter_videos": (context) => OldVideosView(),
+              //'/form_check_copy': (context) => HomePage(cameras),
+              '/today': (context) => TodayView(),
+              '/prs': (context) => PrsView(),
+              '/exercise': (context) => ExerciseView(),
+              "/lifter_programs": (context) => LifterProgramsView(),
+              '/program_builder_view': (context) => ProgramBuilderView(),*/
+      },
     );
+    //});
   }
 }
